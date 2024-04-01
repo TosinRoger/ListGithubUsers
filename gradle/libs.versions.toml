@@ -1,0 +1,37 @@
+[versions]
+# Version Plugins
+agp = "8.3.1"
+kotlin = "1.9.23"
+coreKtx = "1.12.0"
+
+# Version Libs
+appcompat = "1.6.1"
+cardview = "1.0.0"
+constraintlayout = "2.1.4"
+lifecycleRuntimeKtx = "2.7.0"
+material = "1.11.0"
+
+# Versions test
+espressoCore = "3.5.1"
+junit = "4.13.2"
+junitVersion = "1.1.5"
+
+[libraries]
+# APPLICATION DEPENDENCIES
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+# LIBS
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
+constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# LIBS TEST
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+[plugins]
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
