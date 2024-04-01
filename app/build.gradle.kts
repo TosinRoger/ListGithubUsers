@@ -82,7 +82,19 @@ dependencies {
     implementation(libs.constraint.layout)
     implementation(libs.material)
 
+    // Internet connection
+//    implementation(libs.gson)
+//    implementation(libs.json)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.coroutines.adapter)
+
+
     testImplementation(libs.junit)
+    // Internet connection
+    testImplementation(libs.test.retrofit.mock)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
