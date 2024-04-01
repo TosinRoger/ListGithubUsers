@@ -1,8 +1,9 @@
 [versions]
 # Version Plugins
 agp = "8.3.1"
-kotlin = "1.9.23"
 coreKtx = "1.12.0"
+plugin-jacoco = "0.8.11"
+kotlin = "1.9.23"
 
 # Version Libs
 appcompat = "1.6.1"
@@ -19,6 +20,9 @@ junitVersion = "1.1.5"
 [libraries]
 # APPLICATION DEPENDENCIES
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+application-jacoco = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "plugin-jacoco" }
+application-jacoco-agent = { group = "org.jacoco", name = "org.jacoco.agent", version.ref = "plugin-jacoco" }
+application-jacoco-ant = { group = "org.jacoco", name = "org.jacoco.ant", version.ref = "plugin-jacoco" }
 
 # LIBS
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }

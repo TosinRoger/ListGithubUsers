@@ -1,7 +1,14 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
+
+    id("jacoco")
 }
+
+apply {
+    from("../tools/jacoco.gradle")
+}
+
 
 android {
     namespace = "br.com.tosin.listgithubusers"
@@ -46,6 +53,13 @@ android {
         }
     }
 
+    testOptions.apply {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+    }
+
     sourceSets.getByName("main") {
         res.srcDirs(
             listOf(
@@ -55,7 +69,7 @@ android {
             )
         )
     }
-    }
+}
 
 dependencies {
 
