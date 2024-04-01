@@ -1,3 +1,7 @@
+<!-- ![Android CI](https://github.com/TosinRoger/ListGithubUsers/actions/workflows/androidCI_main.yml/badge.svg?branch=main) -->
+[![Coverage](.github/badges/jacoco.svg)](https://github.com/TosinRoger/ListGithubUsers/actions/workflows/androidCI_main.yml)
+<!--![GitHub release (latest by date)](https://img.shields.io/github/v/release/TosinRoger/ListGithubUsers) -->
+
 # List Github Users
 
 Projeto que lista usuários e projetos dos usuários do Github. Projeto desenvolvido em Kotlin Android.
