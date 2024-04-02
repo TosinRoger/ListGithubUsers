@@ -8,4 +8,6 @@
     <string name="num_gist">%d gist</string>
     <string name="num_follower">%d follower</string>
     <string name="num_following">%d following</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
 </resources>

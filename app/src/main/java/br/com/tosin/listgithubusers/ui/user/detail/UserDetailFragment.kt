@@ -2,14 +2,22 @@ package br.com.tosin.listgithubusers.ui.user.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.data.model.User
 import br.com.tosin.listgithubusers.databinding.FragmentUserDetailBinding
+import br.com.tosin.listgithubusers.ui.MainActivity
 import br.com.tosin.listgithubusers.ui.utils.defaultDisplayOfStringEmpty
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
 import com.bumptech.glide.Glide
@@ -44,6 +52,8 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         super.onViewCreated(view, savedInstanceState)
 
         setUpObservers()
+        setUpView()
+        setUpMenu()
 
         viewModel.fetchUserByName(username = username)
     }
@@ -63,6 +73,42 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         }
     }
 
+    private fun setUpView() {
+        (requireActivity() as? MainActivity)?.let { mainActivity ->
+            mainActivity.setSupportActionBar(_binding?.toolbar)
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowTitleEnabled(true)
+        }
+        _binding?.toolbar?.title = ""
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+//                    menuInflater.inflate(R.menu.menu_user_detail, menu)
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        android.R.id.home -> {
+                            findNavController().popBackStack()
+                            true
+                        }
+
+                        else -> {
+                            false
+                        }
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED,
+        )
+
+    }
+
     private fun setUpViewWithUser(user: User) = binding.run {
         Glide
             .with(requireContext())
@@ -74,10 +120,7 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
 
         textViewUserDetailName.text = user.login
         textViewUserDetailLocation.text = user.location.defaultDisplayOfStringEmpty()
-
-        textViewUserDetailNumRepository.text = getString(R.string.num_repository, user.publicRepos)
-        textViewUserDetailNumGist.text = getString(R.string.num_gist, user.publicGists)
-        textViewUserDetailFollowers.text = getString(R.string.num_follower, user.followers)
-        textViewUserDetailFollowings.text = getString(R.string.num_following, user.following)
+        textViewUserDetailFollowers.text = user.followers.toString()
+        textViewUserDetailFollowings.text = user.following.toString()
     }
 }
