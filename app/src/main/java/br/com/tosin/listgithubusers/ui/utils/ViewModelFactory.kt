@@ -1,4 +1,4 @@
-package br.com.tosin.listgithubusers.ui
+package br.com.tosin.listgithubusers.ui.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

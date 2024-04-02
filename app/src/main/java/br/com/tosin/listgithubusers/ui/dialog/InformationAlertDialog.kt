@@ -18,18 +18,17 @@ class InformationAlertDialog(
 ) : DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        return activity?.let {
-            val dialog = AlertDialog.Builder(it)
-                .setTitle(title)
-                .setMessage(msg)
-                .setPositiveButton(positiveButtonText ?: getString(R.string.ok)) { _, _ ->
-                    delegateConfirmation?.let {
-                        it("")
-                    }
+        checkNotNull(activity) { "Activity cannot be null" }
+        val dialog = AlertDialog.Builder(activity)
+            .setTitle(title)
+            .setMessage(msg)
+            .setPositiveButton(positiveButtonText ?: getString(R.string.ok)) { _, _ ->
+                delegateConfirmation?.let {
+                    it("")
                 }
+            }
 
-            dialog.create()
-        } ?: throw IllegalStateException("Activity cannot be null")
+        return dialog.create()
     }
 
     override fun onCancel(dialog: DialogInterface) {

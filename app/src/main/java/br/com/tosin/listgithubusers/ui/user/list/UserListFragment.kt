@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isEmpty
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +18,7 @@ import br.com.tosin.listgithubusers.databinding.FragmentUserListBinding
 import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
 import br.com.tosin.listgithubusers.ui.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.user.list.adapter.UserAdapter
-import br.com.tosin.listgithubusers.ui.viewModelFactory
+import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
 import br.com.tosin.listgithubusers.utils.checkIsOnline
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
