@@ -16,7 +16,7 @@ import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.databinding.FragmentUserListBinding
 import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
-import br.com.tosin.listgithubusers.ui.loadstate.LoadStateFooterAdapter
+import br.com.tosin.listgithubusers.ui.utils.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.user.list.adapter.UserAdapter
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
 import br.com.tosin.listgithubusers.utils.checkIsOnline

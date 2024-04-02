@@ -1,4 +1,4 @@
-package br.com.tosin.listgithubusers.ui.loadstate
+package br.com.tosin.listgithubusers.ui.utils.loadstate
 
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
