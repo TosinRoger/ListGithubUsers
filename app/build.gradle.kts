@@ -4,6 +4,7 @@ plugins {
 
     id("io.gitlab.arturbosch.detekt")
     id("jacoco")
+    id("androidx.navigation.safeargs")
 }
 
 apply {
@@ -68,19 +69,24 @@ android {
                 "src/main/res",
                 "src/main/res/layouts",
                 "src/main/res/layouts/activity",
+                "src/main/res/layouts/user",
             )
         )
     }
 }
 
 dependencies {
-
+    // LIBs
     implementation(libs.appcompat)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.cardview)
     implementation(libs.constraint.layout)
     implementation(libs.material)
+    // Navigation
+    implementation(libs.navigation.dynamic.features.fragment)
+    implementation(libs.navigation.fragment.ktx)
+    implementation(libs.navigation.ui.ktx)
 
     // Internet connection
 //    implementation(libs.gson)
@@ -93,6 +99,7 @@ dependencies {
 
 
     testImplementation(libs.junit)
+    testImplementation(libs.test.navigation)
     // Internet connection
     testImplementation(libs.test.retrofit.mock)
 
