@@ -4,10 +4,7 @@
     <string name="alert">Atenção</string>
     <string name="empty_list">Nada foi encontrado</string>
     <string name="empty_list_people_travel">O pessoal sair de férias e não sobrou ninguém aqui.</string>
-    <string name="num_repository">%d repository</string>
-    <string name="num_gist">%d gist</string>
-    <string name="num_follower">%d follower</string>
-    <string name="num_following">%d following</string>
     <string name="follower">Follower</string>
     <string name="following">Following</string>
+    <string name="gist">Gist</string>
 </resources>

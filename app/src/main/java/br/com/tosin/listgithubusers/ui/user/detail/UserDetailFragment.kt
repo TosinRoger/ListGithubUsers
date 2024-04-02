@@ -87,7 +87,7 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         (requireActivity() as MenuHost).addMenuProvider(
             object : MenuProvider {
                 override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-//                    menuInflater.inflate(R.menu.menu_user_detail, menu)
+                    // do nothing
                 }
 
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
@@ -122,5 +122,6 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         textViewUserDetailLocation.text = user.location.defaultDisplayOfStringEmpty()
         textViewUserDetailFollowers.text = user.followers.toString()
         textViewUserDetailFollowings.text = user.following.toString()
+        textViewUserDetailGist.text = user.publicGists.toString()
     }
 }
