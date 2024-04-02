@@ -7,5 +7,10 @@ fun UserRemote.asModel() = User(
     id = id,
     login = login,
     avatarUrl = avatarUrl,
-    url = url
+    url = url,
+    location = location,
+    publicRepos = publicRepos,
+    publicGists = publicGists,
+    followers = followers,
+    following = following
 )

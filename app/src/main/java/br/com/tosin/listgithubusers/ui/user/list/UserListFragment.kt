@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +17,7 @@ import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.databinding.FragmentUserListBinding
 import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
+import br.com.tosin.listgithubusers.ui.user.detail.UserDetailFragment
 import br.com.tosin.listgithubusers.ui.utils.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.user.list.adapter.UserAdapter
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
@@ -58,7 +60,9 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun setUpView() {
-        mAdapter = UserAdapter()
+        mAdapter = UserAdapter { username ->
+            openUserDetails(username)
+        }
 
         mAdapter.addLoadStateListener { loadState ->
             // Only show the list if refresh succeeds.
@@ -110,5 +114,13 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
     private fun showEmptyList(show: Boolean) {
         binding.placeholderEmptyList.root.isVisible = show
+    }
+
+    private fun openUserDetails(username: String) {
+        val args = Bundle().apply {
+            putString(UserDetailFragment.ARGS_USERNAME, username)
+        }
+
+        findNavController().navigate(R.id.action_userListFragment_to_userDetailFragment, args)
     }
 }

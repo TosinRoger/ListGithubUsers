@@ -6,10 +6,13 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.data.model.User
+import br.com.tosin.listgithubusers.ui.utils.onItemClicked
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-class UserAdapter : PagingDataAdapter<User, UserViewHolder>(diffCallback) {
+class UserAdapter(
+    private val delegateItemClicked: onItemClicked
+) : PagingDataAdapter<User, UserViewHolder>(diffCallback) {
     companion object {
 
         private val diffCallback = object : DiffUtil.ItemCallback<User>() {
@@ -40,6 +43,10 @@ class UserAdapter : PagingDataAdapter<User, UserViewHolder>(diffCallback) {
                 .placeholder(R.drawable.ic_user_rounded)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .into(holder.photo)
+
+            holder.itemView.setOnClickListener {
+                delegateItemClicked(user.login)
+            }
         }
     }
 }
