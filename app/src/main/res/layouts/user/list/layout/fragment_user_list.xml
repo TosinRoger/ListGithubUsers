@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/placeholder_empty_list"
-        layout="@layout/empty_list"
+        layout="@layout/empty_user_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

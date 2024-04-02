@@ -9,15 +9,21 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.data.model.User
+import br.com.tosin.listgithubusers.data.model.UserRepo
 import br.com.tosin.listgithubusers.databinding.FragmentUserDetailBinding
 import br.com.tosin.listgithubusers.ui.MainActivity
+import br.com.tosin.listgithubusers.ui.user.detail.adapter.UserRepoAdapter
 import br.com.tosin.listgithubusers.ui.utils.defaultDisplayOfStringEmpty
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
 import com.bumptech.glide.Glide
@@ -32,6 +38,7 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
     private var _binding: FragmentUserDetailBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: UserDetailViewModel
+    private lateinit var mAdapter: UserRepoAdapter
 
     private val username by lazy {
         val aux = requireArguments().getString(ARGS_USERNAME)
@@ -55,7 +62,7 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         setUpView()
         setUpMenu()
 
-        viewModel.fetchUserByName(username = username)
+        viewModel.fetchUserAndSetUpView(username = username)
     }
 
     private fun setUpObservers() {
@@ -70,6 +77,10 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
 
         viewModel.user.observe(viewLifecycleOwner) {
             setUpViewWithUser(it)
+        }
+
+        viewModel.userRepo.observe(viewLifecycleOwner) {
+            setUpAdapterRepo(it)
         }
     }
 
@@ -123,5 +134,20 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         textViewUserDetailFollowers.text = user.followers.toString()
         textViewUserDetailFollowings.text = user.following.toString()
         textViewUserDetailGist.text = user.publicGists.toString()
+    }
+
+    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) {
+        _binding?.containerEmptyRepoList?.root?.isVisible = userRepoList.isEmpty()
+
+        mAdapter = UserRepoAdapter(userRepoList)
+
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+
+        binding.recyclerViewUserDetailRepositories.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = mAdapter
+            addItemDecoration(dividerItemDecoration)
+        }
     }
 }

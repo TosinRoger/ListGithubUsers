@@ -87,7 +87,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             }
         }
 
-        val dividerItemDecoration = DividerItemDecoration(context, RecyclerView.VERTICAL)
+        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
 
         val concatAdapter = mAdapter.withLoadStateFooter(LoadStateFooterAdapter())
 
