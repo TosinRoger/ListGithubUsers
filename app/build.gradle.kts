@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 
+    id("com.google.devtools.ksp")
     id("io.gitlab.arturbosch.detekt")
     id("jacoco")
     id("androidx.navigation.safeargs")
@@ -69,6 +70,7 @@ android {
                 "src/main/res",
                 "src/main/res/layouts",
                 "src/main/res/layouts/activity",
+                "src/main/res/layouts/components",
                 "src/main/res/layouts/user",
             )
         )
@@ -87,21 +89,26 @@ dependencies {
     implementation(libs.navigation.dynamic.features.fragment)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
-
+    // Paging
+    implementation(libs.paging.runtime.ktx)
+    // Glide
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
     // Internet connection
-//    implementation(libs.gson)
-//    implementation(libs.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.coroutines.adapter)
 
-
+    // UNIT TEST
     testImplementation(libs.junit)
+    testImplementation(libs.test.android.arch)
+    testImplementation(libs.test.androidx.core)
     testImplementation(libs.test.navigation)
-    // Internet connection
+    testImplementation(libs.test.kotlinx.coroutines)
     testImplementation(libs.test.retrofit.mock)
+    testImplementation(libs.test.mockk)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

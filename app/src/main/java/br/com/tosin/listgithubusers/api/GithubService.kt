@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object GithubService {
 
-    private const val BASE_URL = "https://api.github.com"
+    private const val BASE_URL = "https://api.github.com/"
 
     fun create(): GithubServiceDao {
         val retrofit = Retrofit.Builder()

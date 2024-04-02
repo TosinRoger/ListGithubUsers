@@ -16,4 +16,5 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.devtools.ksp) apply false
 }
