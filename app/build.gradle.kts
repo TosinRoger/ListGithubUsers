@@ -94,7 +94,6 @@ dependencies {
     // Glide
     implementation(libs.glide)
     ksp(libs.glide.ksp)
-
     // Internet connection
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
@@ -102,11 +101,14 @@ dependencies {
     implementation(libs.retrofit.converter.gson)
     implementation(libs.retrofit.coroutines.adapter)
 
-
+    // UNIT TEST
     testImplementation(libs.junit)
+    testImplementation(libs.test.android.arch)
+    testImplementation(libs.test.androidx.core)
     testImplementation(libs.test.navigation)
-    // Internet connection
+    testImplementation(libs.test.kotlinx.coroutines)
     testImplementation(libs.test.retrofit.mock)
+    testImplementation(libs.test.mockk)
 
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
