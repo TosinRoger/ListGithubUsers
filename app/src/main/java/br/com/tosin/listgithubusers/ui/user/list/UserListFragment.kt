@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
@@ -14,9 +16,11 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.databinding.FragmentUserListBinding
+import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
 import br.com.tosin.listgithubusers.ui.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.user.list.adapter.UserAdapter
 import br.com.tosin.listgithubusers.ui.viewModelFactory
+import br.com.tosin.listgithubusers.utils.checkIsOnline
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -63,13 +67,20 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             // Show loading spinner during initial load or refresh.
             val showLoading = loadState.source.refresh is LoadState.Loading
 
+            val hasError = loadState.source.refresh is LoadState.Error
+
+            if (hasError) {
+                showEmptyList(true)
+                showError("Error !!!!")
+            }
+
             // here only hide loading. The show is in launch search/load
             if (showLoading) {
-//                showUiState(UiProductState(UiState.LOADING))
+                showEmptyList(false)
             } else if (showList && mAdapter.itemCount == 0) {
-//                showUiState(UiProductState(UiState.EMPTY_LIST))
+                showEmptyList(true)
             } else if (showList && mAdapter.itemCount > 0) {
-//                showUiState(UiProductState(UiState.DONE))
+                showEmptyList(false)
             }
         }
 
@@ -85,9 +96,20 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         }
 
         lifecycleScope.launch {
-            viewModel.loadUsers().collectLatest {
+            viewModel.loadUsers(isOnline = checkIsOnline(requireContext())).collectLatest {
                 mAdapter.submitData(it)
             }
         }
+    }
+
+    private fun showError(msg: String) {
+        InformationAlertDialog(
+            title = getString(R.string.alert),
+            msg = msg
+        ).show(childFragmentManager, "WorkDetailShowError")
+    }
+
+    private fun showEmptyList(show: Boolean) {
+        binding.placeholderEmptyList.root.isVisible = show
     }
 }

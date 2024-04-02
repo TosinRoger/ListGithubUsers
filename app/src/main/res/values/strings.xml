@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">List Github Users</string>
+    <string name="ok">OK</string>
+    <string name="alert">Atenção</string>
+    <string name="empty_list">Nada foi encontrado</string>
+    <string name="empty_list_people_travel">O pessoal sair de férias e não sobrou ninguém aqui.</string>
 </resources>
