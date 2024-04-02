@@ -62,6 +62,7 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         setUpView()
         setUpMenu()
 
+        showLoadingRepositoryList(show = true)
         viewModel.fetchUserAndSetUpView(username = username)
     }
 
@@ -92,6 +93,8 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
             mainActivity.supportActionBar?.setDisplayShowTitleEnabled(true)
         }
         _binding?.toolbar?.title = ""
+
+        _binding?.containerRepositoriList?.containerEmptyRepoList?.root?.isVisible = false
     }
 
     private fun setUpMenu() {
@@ -136,18 +139,27 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         textViewUserDetailGist.text = user.publicGists.toString()
     }
 
-    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) {
-        _binding?.containerEmptyRepoList?.root?.isVisible = userRepoList.isEmpty()
+    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) = binding.containerRepositoriList.run {
+        showLoadingRepositoryList(show = false)
 
-        mAdapter = UserRepoAdapter(userRepoList)
+        if (userRepoList.isEmpty()) {
+            containerEmptyRepoList.root.isVisible = true
+        } else {
+            mAdapter = UserRepoAdapter(userRepoList)
 
-        val dividerItemDecoration = DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+            val dividerItemDecoration =
+                DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
 
-        binding.recyclerViewUserDetailRepositories.apply {
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = mAdapter
-            addItemDecoration(dividerItemDecoration)
+            binding.containerRepositoriList.recyclerViewUserDetailRepositories.apply {
+                setHasFixedSize(true)
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = mAdapter
+                addItemDecoration(dividerItemDecoration)
+            }
         }
+    }
+
+    private fun showLoadingRepositoryList(show:Boolean) {
+        _binding?.containerRepositoriList?.progressBarUserDetail?.isVisible = show
     }
 }
