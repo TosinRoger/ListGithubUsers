@@ -6,6 +6,8 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.data.model.User
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 
 class UserAdapter : PagingDataAdapter<User, UserViewHolder>(diffCallback) {
     companion object {
@@ -30,6 +32,14 @@ class UserAdapter : PagingDataAdapter<User, UserViewHolder>(diffCallback) {
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         getItem(position)?.let { user ->
             holder.name.text = user.login
+
+            Glide
+                .with(holder.itemView.context)
+                .load(user.avatarUrl)
+                .circleCrop()
+                .placeholder(R.drawable.ic_user_rounded)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .into(holder.photo)
         }
     }
 }

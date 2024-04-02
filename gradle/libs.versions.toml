@@ -5,12 +5,14 @@ coreKtx = "1.12.0"
 kotlin = "1.9.23"
 plugin-detekt = "1.23.5"
 plugin-jacoco = "0.8.11"
+plugin-devtools-ksp = "1.9.22-1.0.17"
 plugin-navigation-safe-args = "2.7.7"
 
 # Version Libs
 appcompat = "1.6.1"
 cardview = "1.0.0"
 constraintlayout = "2.1.4"
+glide = "4.16.0"
 lifecycleRuntimeKtx = "2.7.0"
 material = "1.11.0"
 navigation = "2.7.7"
@@ -39,6 +41,8 @@ androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecyc
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 constraint-layout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+glide = { group = "com.github.bumptech.glide", name = "glide", version.ref = "glide" }
+glide-ksp = { group = "com.github.bumptech.glide", name = "ksp", version.ref = "glide" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 navigation-dynamic-features-fragment = { group = "androidx.navigation", name = "navigation-dynamic-features-fragment", version.ref = "navigation" }
 navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigation" }
@@ -61,4 +65,5 @@ test-retrofit-mock = { group = "com.squareup.retrofit2", name = "retrofit-mock",
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref ="plugin-detekt" }
+devtools-ksp = { id = "com.google.devtools.ksp", version.ref = "plugin-devtools-ksp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }

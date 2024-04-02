@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 
+    id("com.google.devtools.ksp")
     id("io.gitlab.arturbosch.detekt")
     id("jacoco")
     id("androidx.navigation.safeargs")
@@ -90,10 +91,11 @@ dependencies {
     implementation(libs.navigation.ui.ktx)
     // Paging
     implementation(libs.paging.runtime.ktx)
+    // Glide
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
 
     // Internet connection
-//    implementation(libs.gson)
-//    implementation(libs.json)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
     implementation(libs.retrofit)

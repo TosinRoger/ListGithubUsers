@@ -26,11 +26,11 @@ class UserPagingSource(
         return try {
             if (isOnline) {
                 val position = params.key ?: STARTING_PAGE_INDEX
-                val response = remoteRepository.getUsers().map { it.asModel() }
+                val response = remoteRepository.getUsers(position).map { it.asModel() }
                 val nextKey = if (response.isEmpty()) {
                     null
                 } else {
-                    position + 1
+                    response.last().id + 1
                 }
                 LoadResult.Page(
                     data = response,

@@ -28,4 +28,5 @@
         app:layout_constraintStart_toEndOf="@+id/imageView_itemUserList_photo"
         app:layout_constraintTop_toTopOf="@+id/imageView_itemUserList_photo"
         tools:text="@tools:sample/full_names" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
