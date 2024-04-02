@@ -1,6 +1,7 @@
 package br.com.tosin.listgithubusers.api.entity
 
 import com.google.gson.annotations.SerializedName
+import java.util.Date
 
 data class UserRepoRemote(
     @SerializedName("id")
@@ -20,11 +21,11 @@ data class UserRepoRemote(
     @SerializedName("fork")
     var fork: Boolean,
     @SerializedName("created_at")
-    var createdAt: String,
+    var createdAt: Date,
     @SerializedName("updated_at")
-    var updatedAt: String,
+    var updatedAt: Date,
     @SerializedName("pushed_at")
-    var pushedAt: String,
+    var pushedAt: Date,
     @SerializedName("homepage")
     var homepage: String? = null,
     @SerializedName("stargazers_count")

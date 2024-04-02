@@ -1,5 +1,7 @@
 package br.com.tosin.listgithubusers.data.model
 
+import java.util.Calendar
+
 data class UserRepo(
     var id: Int,
     var name: String,
@@ -9,9 +11,9 @@ data class UserRepo(
     var htmlUrl: String,
     var description: String? = null,
     var fork: Boolean,
-    var createdAt: String,
-    var updatedAt: String,
-    var pushedAt: String,
+    var createdAt: Calendar,
+    var updatedAt: Calendar,
+    var pushedAt: Calendar,
     var homepage: String? = null,
     var stargazersCount: Int,
     var watchersCount: Int,

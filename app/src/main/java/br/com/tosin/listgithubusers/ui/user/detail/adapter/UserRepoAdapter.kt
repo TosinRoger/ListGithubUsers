@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.data.model.UserRepo
 import br.com.tosin.listgithubusers.ui.utils.defaultDisplayOfStringEmpty
+import br.com.tosin.listgithubusers.ui.utils.toFormatViewHolder
 
 class UserRepoAdapter(
     private val userRepoList: List<UserRepo>
@@ -33,6 +34,6 @@ class UserRepoAdapter(
         holder.lastUpdated.text = holder
             .itemView
             .resources
-            .getString(R.string.last_updated, userRepo.updatedAt)
+            .getString(R.string.last_updated, userRepo.updatedAt.toFormatViewHolder())
     }
 }
