@@ -69,6 +69,7 @@ android {
                 "src/main/res",
                 "src/main/res/layouts",
                 "src/main/res/layouts/activity",
+                "src/main/res/layouts/components",
                 "src/main/res/layouts/user",
             )
         )
@@ -87,6 +88,8 @@ dependencies {
     implementation(libs.navigation.dynamic.features.fragment)
     implementation(libs.navigation.fragment.ktx)
     implementation(libs.navigation.ui.ktx)
+    // Paging
+    implementation(libs.paging.runtime.ktx)
 
     // Internet connection
 //    implementation(libs.gson)
