@@ -6,6 +6,7 @@ buildscript {
         classpath(libs.application.jacoco)
         classpath(libs.application.jacoco.agent)
         classpath(libs.application.jacoco.ant)
+        classpath(libs.application.navigation.safe.args)
     }
 }
 
