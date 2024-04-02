@@ -108,6 +108,7 @@ dependencies {
     testImplementation(libs.test.androidx.core)
     testImplementation(libs.test.navigation)
     testImplementation(libs.test.kotlinx.coroutines)
+    testImplementation(libs.test.kotlin.junit)
     testImplementation(libs.test.retrofit.mock)
     testImplementation(libs.test.mockk)
 

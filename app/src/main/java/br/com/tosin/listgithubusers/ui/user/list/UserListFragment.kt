@@ -74,7 +74,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
             if (hasError) {
                 showEmptyList(true)
-                showError("Error !!!!")
+                showError(getString(R.string.no_network))
             }
 
             // here only hide loading. The show is in launch search/load
@@ -109,7 +109,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         InformationAlertDialog(
             title = getString(R.string.alert),
             msg = msg
-        ).show(childFragmentManager, "WorkDetailShowError")
+        ).show(childFragmentManager, "UserList")
     }
 
     private fun showEmptyList(show: Boolean) {

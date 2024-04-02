@@ -23,13 +23,15 @@ import br.com.tosin.listgithubusers.data.model.User
 import br.com.tosin.listgithubusers.data.model.UserRepo
 import br.com.tosin.listgithubusers.databinding.FragmentUserDetailBinding
 import br.com.tosin.listgithubusers.ui.MainActivity
+import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
 import br.com.tosin.listgithubusers.ui.user.detail.adapter.UserRepoAdapter
 import br.com.tosin.listgithubusers.ui.utils.defaultDisplayOfStringEmpty
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
+import br.com.tosin.listgithubusers.utils.checkIsOnline
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 
-class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
+class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
 
     companion object {
         const val ARGS_USERNAME = "args_username"
@@ -63,7 +65,10 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         setUpMenu()
 
         showLoadingRepositoryList(show = true)
-        viewModel.fetchUserAndSetUpView(username = username)
+        viewModel.fetchUserAndSetUpView(
+            isOnline = checkIsOnline(requireContext()),
+            username = username
+        )
     }
 
     private fun setUpObservers() {
@@ -82,6 +87,10 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
 
         viewModel.userRepo.observe(viewLifecycleOwner) {
             setUpAdapterRepo(it)
+        }
+
+        viewModel.errorNoNetwork.observe(viewLifecycleOwner) {
+            showError(getString(R.string.no_network))
         }
     }
 
@@ -139,27 +148,36 @@ class UserDetailFragment:Fragment(R.layout.fragment_user_detail) {
         textViewUserDetailGist.text = user.publicGists.toString()
     }
 
-    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) = binding.containerRepositoriList.run {
-        showLoadingRepositoryList(show = false)
+    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) =
+        binding.containerRepositoriList.run {
+            showLoadingRepositoryList(show = false)
 
-        if (userRepoList.isEmpty()) {
-            containerEmptyRepoList.root.isVisible = true
-        } else {
-            mAdapter = UserRepoAdapter(userRepoList)
+            if (userRepoList.isEmpty()) {
+                containerEmptyRepoList.root.isVisible = true
+            } else {
+                mAdapter = UserRepoAdapter(userRepoList)
 
-            val dividerItemDecoration =
-                DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+                val dividerItemDecoration =
+                    DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
 
-            binding.containerRepositoriList.recyclerViewUserDetailRepositories.apply {
-                setHasFixedSize(true)
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = mAdapter
-                addItemDecoration(dividerItemDecoration)
+                binding.containerRepositoriList.recyclerViewUserDetailRepositories.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = mAdapter
+                    addItemDecoration(dividerItemDecoration)
+                }
             }
         }
+
+    private fun showLoadingRepositoryList(show: Boolean) {
+        _binding?.containerRepositoriList?.progressBarUserDetail?.isVisible = show
     }
 
-    private fun showLoadingRepositoryList(show:Boolean) {
-        _binding?.containerRepositoriList?.progressBarUserDetail?.isVisible = show
+    private fun showError(msg: String) {
+        showLoadingRepositoryList(show = false)
+        InformationAlertDialog(
+            title = getString(R.string.alert),
+            msg = msg
+        ).show(childFragmentManager, "UserDetail")
     }
 }

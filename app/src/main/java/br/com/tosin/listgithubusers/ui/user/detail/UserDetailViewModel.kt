@@ -22,10 +22,18 @@ class UserDetailViewModel(
     val userRepo: LiveData<List<UserRepo>>
         get() = _userRepo
 
-    fun fetchUserAndSetUpView(username: String) {
-        viewModelScope.launch {
-            fetchUserByName(username = username)
-            fetchRepositoriesFromUser(username = username)
+    private var _errorNoNetwork = MutableLiveData<Boolean>()
+    val errorNoNetwork: LiveData<Boolean>
+        get() = _errorNoNetwork
+
+    fun fetchUserAndSetUpView(isOnline: Boolean, username: String) {
+        if (isOnline) {
+            viewModelScope.launch {
+                fetchUserByName(username = username)
+                fetchRepositoriesFromUser(username = username)
+            }
+        } else {
+            _errorNoNetwork.postValue(true)
         }
     }
 
