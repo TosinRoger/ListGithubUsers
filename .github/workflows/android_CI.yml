@@ -52,7 +52,7 @@ jobs:
           cache: gradle
           
       - name: Run local detekt
-        run: ./gradlew :app:detektVerification
+        run: ./gradlew detekt
 
   coverage:
     runs-on: ubuntu-latest

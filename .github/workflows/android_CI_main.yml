@@ -50,7 +50,7 @@ jobs:
           cache: gradle
           
       - name: Run local detekt
-        run: ./gradlew :app:detektVerification
+        run: ./gradlew detekt
 
       - name: "Static code analysis"
         uses: natiginfo/action-detekt-all@1.22.0

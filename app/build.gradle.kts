@@ -2,11 +2,13 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
 
+    id("io.gitlab.arturbosch.detekt")
     id("jacoco")
 }
 
 apply {
     from("../tools/jacoco.gradle")
+//    from("../tools/detekt/detekt.gradle")
 }
 
 

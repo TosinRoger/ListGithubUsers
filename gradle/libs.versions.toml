@@ -2,8 +2,9 @@
 # Version Plugins
 agp = "8.3.1"
 coreKtx = "1.12.0"
-plugin-jacoco = "0.8.11"
 kotlin = "1.9.23"
+plugin-detekt = "1.23.5"
+plugin-jacoco = "0.8.11"
 
 # Version Libs
 appcompat = "1.6.1"
@@ -20,6 +21,8 @@ junitVersion = "1.1.5"
 [libraries]
 # APPLICATION DEPENDENCIES
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+application-android-gradle = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+application-detekt = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "plugin-detekt" }
 application-jacoco = { group = "org.jacoco", name = "org.jacoco.core", version.ref = "plugin-jacoco" }
 application-jacoco-agent = { group = "org.jacoco", name = "org.jacoco.agent", version.ref = "plugin-jacoco" }
 application-jacoco-ant = { group = "org.jacoco", name = "org.jacoco.ant", version.ref = "plugin-jacoco" }
@@ -38,4 +41,5 @@ junit = { group = "junit", name = "junit", version.ref = "junit" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref ="plugin-detekt" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
