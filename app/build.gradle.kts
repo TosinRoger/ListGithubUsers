@@ -71,7 +71,8 @@ android {
                 "src/main/res/layouts",
                 "src/main/res/layouts/activity",
                 "src/main/res/layouts/components",
-                "src/main/res/layouts/user",
+                "src/main/res/layouts/user/detail",
+                "src/main/res/layouts/user/list",
             )
         )
     }
