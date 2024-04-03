@@ -1,4 +1,4 @@
-@file:Suppress("TooGenericExceptionCaught")
+@file:Suppress("TooGenericExceptionCaught", "SwallowedException")
 
 package br.com.tosin.listgithubusers.data
 
