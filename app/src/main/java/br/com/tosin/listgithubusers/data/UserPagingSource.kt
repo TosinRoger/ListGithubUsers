@@ -1,3 +1,5 @@
+@file:Suppress("TooGenericExceptionCaught")
+
 package br.com.tosin.listgithubusers.data
 
 import androidx.paging.PagingSource
