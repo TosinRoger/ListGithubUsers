@@ -12,16 +12,16 @@ Na tela de lista de usuário deve ser possível buscar um usuário por uma busca
 
 Host da API: `https://api.github.com`
 
-- [ ] Criar uma tela para lista os usuário;
-- [ ] Consumir a API para retornar a lista de usuários;
-- [ ] Paginar a lista de usuários;
-- [ ] Criar os testes de unidade da lista de usuários;
-- [ ] Criar a tela de detalhes do usuário;
-- [ ] Consumir a API para retornar os detalhes do usuário;
-- [ ] Criar os testes de unidade da tela de detalhes do usuário;
-- [ ] Criar a tela de lista de repositórios do usuário;
-- [ ] Consumir a API da retornar a lista de repositórios do usuário;
-- [ ] Criar os teste de unidade da lista de repositórios do usuário;
+- [x] Criar uma tela para lista os usuário;
+- [x] Consumir a API para retornar a lista de usuários;
+- [x] Paginar a lista de usuários;
+- [x] Criar os testes de unidade da lista de usuários;
+- [x] Criar a tela de detalhes do usuário;
+- [x] Consumir a API para retornar os detalhes do usuário;
+- [x] Criar os testes de unidade da tela de detalhes do usuário;
+- [x] ~Criar a tela de lista de repositórios do usuário~ Foi adicionado na mesma tela de detalhes do usuário;
+- [x] Consumir a API da retornar a lista de repositórios do usuário;
+- [x] Criar os teste de unidade da lista de repositórios do usuário;
 - [ ] Implementar a busca de usuário por noma na tela de lista de usuário;
 - [ ] Criar os teste de unidade para a busca de usuário por texto;
-- [ ] EXTRA: Implementar divisão de tela no modo tablet (Definir as telas);
+- [ ] EXTRA: Implementar divisão de tela no modo tablet ~(Definir as telas)~ Como foram feitas duas telas, o modo tablet será nas duas telas existentes;
