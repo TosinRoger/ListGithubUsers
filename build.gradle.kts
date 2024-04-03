@@ -6,6 +6,7 @@ buildscript {
         classpath(libs.application.jacoco)
         classpath(libs.application.jacoco.agent)
         classpath(libs.application.jacoco.ant)
+        classpath(libs.application.navigation.safe.args)
     }
 }
 
@@ -15,4 +16,5 @@ plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.detekt)
+    alias(libs.plugins.devtools.ksp) apply false
 }

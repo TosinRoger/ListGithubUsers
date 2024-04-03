@@ -1,0 +1,181 @@
+package br.com.tosin.listgithubusers.ui.user.detail
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import br.com.tosin.listgithubusers.R
+import br.com.tosin.listgithubusers.api.GithubService
+import br.com.tosin.listgithubusers.data.model.User
+import br.com.tosin.listgithubusers.data.model.UserRepo
+import br.com.tosin.listgithubusers.databinding.FragmentUserDetailBinding
+import br.com.tosin.listgithubusers.ui.MainActivity
+import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
+import br.com.tosin.listgithubusers.ui.user.detail.adapter.UserRepoAdapter
+import br.com.tosin.listgithubusers.ui.utils.defaultDisplayOfStringEmpty
+import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
+import br.com.tosin.listgithubusers.utils.checkIsOnline
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+
+class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
+
+    companion object {
+        const val ARGS_USERNAME = "args_username"
+    }
+
+    private var _binding: FragmentUserDetailBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: UserDetailViewModel
+    private lateinit var mAdapter: UserRepoAdapter
+
+    private val username by lazy {
+        val aux = requireArguments().getString(ARGS_USERNAME)
+        checkNotNull(aux)
+        aux
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentUserDetailBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setUpObservers()
+        setUpView()
+        setUpMenu()
+
+        showLoadingRepositoryList(show = true)
+        viewModel.fetchUserAndSetUpView(
+            isOnline = checkIsOnline(requireContext()),
+            username = username
+        )
+    }
+
+    private fun setUpObservers() {
+        viewModel = ViewModelProvider(
+            this,
+            viewModelFactory {
+                UserDetailViewModel(
+                    repository = GithubService.create()
+                )
+            }
+        )[UserDetailViewModel::class.java]
+
+        viewModel.user.observe(viewLifecycleOwner) {
+            setUpViewWithUser(it)
+        }
+
+        viewModel.userRepo.observe(viewLifecycleOwner) {
+            setUpAdapterRepo(it)
+        }
+
+        viewModel.errorNoNetwork.observe(viewLifecycleOwner) {
+            showError(getString(R.string.no_network))
+        }
+    }
+
+    private fun setUpView() {
+        (requireActivity() as? MainActivity)?.let { mainActivity ->
+            mainActivity.setSupportActionBar(_binding?.toolbar)
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
+        _binding?.containerRepositoriList?.containerEmptyRepoList?.root?.isVisible = false
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    // do nothing
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        android.R.id.home -> {
+                            findNavController().popBackStack()
+                            true
+                        }
+
+                        else -> {
+                            false
+                        }
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED,
+        )
+    }
+
+    private fun setUpViewWithUser(user: User) = binding.run {
+        Glide
+            .with(requireContext())
+            .load(user.avatarUrl)
+            .circleCrop()
+            .placeholder(R.drawable.ic_user_rounded)
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .into(imageViewUserDetailAvatar)
+
+        textViewUserDetailName.text = user.login
+        textViewUserDetailLocation.text = user.location.defaultDisplayOfStringEmpty()
+        textViewUserDetailFollowers.text = user.followers.toString()
+        textViewUserDetailFollowings.text = user.following.toString()
+        textViewUserDetailGist.text = user.publicGists.toString()
+    }
+
+    private fun setUpAdapterRepo(userRepoList: List<UserRepo>) =
+        binding.containerRepositoriList.run {
+            showLoadingRepositoryList(show = false)
+
+            if (userRepoList.isEmpty()) {
+                containerEmptyRepoList.root.isVisible = true
+            } else {
+                mAdapter = UserRepoAdapter(userRepoList)
+
+                val dividerItemDecoration =
+                    DividerItemDecoration(requireContext(), RecyclerView.VERTICAL)
+
+                binding.containerRepositoriList.recyclerViewUserDetailRepositories.apply {
+                    setHasFixedSize(true)
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = mAdapter
+                    addItemDecoration(dividerItemDecoration)
+                }
+            }
+        }
+
+    private fun showLoadingRepositoryList(show: Boolean) {
+        _binding?.containerRepositoriList?.progressBarUserDetail?.isVisible = show
+    }
+
+    private fun showError(msg: String) {
+        showLoadingRepositoryList(show = false)
+        InformationAlertDialog(
+            title = getString(R.string.alert),
+            msg = msg
+        ).show(childFragmentManager, "UserDetail")
+    }
+}

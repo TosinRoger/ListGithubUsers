@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">List Github Users</string>
+    <string name="ok">OK</string>
+    <string name="alert">Atenção</string>
+    <string name="no_network">Sem conexão com a internet</string>
+    <string name="empty_list">Nada foi encontrado</string>
+    <string name="empty_list_people_travel">O pessoal sair de férias e não sobrou ninguém aqui.</string>
+    <string name="follower">Follower</string>
+    <string name="following">Following</string>
+    <string name="gist">Gist</string>
+    <string name="last_updated">Última atualização %s</string>
+    <string name="empty_repository_list">Apesar da floresta estar cheia, não há projetos</string>
+    <string name="search">Buscar por nome de usuário</string>
+    <string name="empty_search">Nenhum usuário encontrado para a busca</string>
 </resources>
