@@ -29,14 +29,17 @@ class UserPagingSource(
         return try {
             val position = params.key ?: STARTING_PAGE_INDEX
 
-            val response = if (searchUser.isEmpty()) {
-                remoteRepository.getUsers(position).map { it.asModel() }
+            var response: List<User>
+            if (searchUser.isEmpty()) {
+                response = remoteRepository.getUsers(position).map { it.asModel() }
             } else {
                 try {
                     val userRemote = remoteRepository.fetchUserByUsername(searchUser)
-                    listOf(userRemote.asModel())
+                    response = listOf(userRemote.asModel())
                 } catch (e: HttpException) {
-                    emptyList()
+                    response = emptyList()
+
+                    return LoadResult.Error(e)
                 }
             }
 

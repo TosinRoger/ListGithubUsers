@@ -90,6 +90,16 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             // Show loading spinner during initial load or refresh.
             val showLoading = loadState.source.refresh is LoadState.Loading
 
+            val hasError = loadState.source.refresh is LoadState.Error
+
+            if (hasError) {
+                val error = loadState.source.refresh as LoadState.Error
+                showError(error.error.localizedMessage ?: getString(R.string.no_network))
+
+                showEmptyList(show = !isSearch)
+                showEmptySearch(show = isSearch)
+            }
+
             // here only hide loading. The show is in launch search/load
             if (showLoading) {
                 showEmptyList(show = false)
