@@ -44,7 +44,7 @@ class UserListViewModelTest {
         MockKAnnotations.init(this)
 
         viewModel = UserListViewModel(repository = repository)
-        userPagingSource = UserPagingSource(isOnline = true, remoteRepository = repository)
+        userPagingSource = UserPagingSource(remoteRepository = repository)
     }
 
     @Test
@@ -55,7 +55,7 @@ class UserListViewModelTest {
         stubGetUsersRemote(userRemoteList)
 
         // WHEN
-        viewModel.loadUsers(isOnline = true)
+        viewModel.loadUsers()
 
         // THEN
         val expected = PagingSource.LoadResult.Page(
@@ -84,7 +84,7 @@ class UserListViewModelTest {
         stubGetUsersRemote(userRemoteList)
 
         // WHEN
-        viewModel.loadUsers(isOnline = true)
+        viewModel.loadUsers()
 
         // THEN
         val expected = PagingSource.LoadResult.Page(
