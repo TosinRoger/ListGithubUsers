@@ -7,11 +7,11 @@ import androidx.paging.PagingState
 import br.com.tosin.listgithubusers.api.GithubServiceDao
 import br.com.tosin.listgithubusers.data.mapper.asModel
 import br.com.tosin.listgithubusers.data.model.User
-import retrofit2.HttpException
 
-class UserPagingSource(
+class SearchUserPagingSource(
+    private val isOnline: Boolean,
     private val remoteRepository: GithubServiceDao,
-    private val searchUser: String = ""
+    private val searchUser: String
 ) : PagingSource<Int, User>() {
 
     companion object {
@@ -27,29 +27,28 @@ class UserPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, User> {
         return try {
-            val position = params.key ?: STARTING_PAGE_INDEX
+            if (isOnline) {
+                val position = params.key ?: STARTING_PAGE_INDEX
+                val userRemote = remoteRepository.fetchUserByUsername(searchUser)
 
-            val response = if (searchUser.isEmpty()) {
-                remoteRepository.getUsers(position).map { it.asModel() }
-            } else {
-                try {
-                    val userRemote = remoteRepository.fetchUserByUsername(searchUser)
-                    listOf(userRemote.asModel())
-                } catch (e: HttpException) {
-                    emptyList()
+                val responseList = mutableListOf<User>()
+
+                val user = userRemote.asModel()
+                responseList.add(user)
+
+                val nextKey = if (responseList.isEmpty()) {
+                    null
+                } else {
+                    responseList.last().id + 1
                 }
-            }
-
-            val nextKey = if (response.isEmpty() || searchUser.isNotEmpty()) {
-                null
+                LoadResult.Page(
+                    data = responseList,
+                    prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
+                    nextKey = nextKey
+                )
             } else {
-                response.last().id + 1
+                LoadResult.Error(Exception("No network"))
             }
-            LoadResult.Page(
-                data = response,
-                prevKey = if (position == STARTING_PAGE_INDEX) null else position - 1,
-                nextKey = nextKey
-            )
         } catch (e: Exception) {
             LoadResult.Error(e)
         }

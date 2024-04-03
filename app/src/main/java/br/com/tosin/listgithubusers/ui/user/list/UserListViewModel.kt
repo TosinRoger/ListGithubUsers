@@ -17,10 +17,10 @@ class UserListViewModel(
         private const val PAGE_SIZE = 10
     }
 
-    fun loadUsers(isOnline: Boolean): Flow<PagingData<User>> {
+    fun loadUsers(searchUser: String = ""): Flow<PagingData<User>> {
         val pagingSourceFactory = UserPagingSource(
-            isOnline = isOnline,
-            remoteRepository = repository
+            remoteRepository = repository,
+            searchUser = searchUser
         )
         val pager = Pager(
             config = PagingConfig(

@@ -99,9 +99,8 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
             mainActivity.setSupportActionBar(_binding?.toolbar)
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
-            mainActivity.supportActionBar?.setDisplayShowTitleEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowTitleEnabled(false)
         }
-        _binding?.toolbar?.title = ""
 
         _binding?.containerRepositoriList?.containerEmptyRepoList?.root?.isVisible = false
     }
@@ -129,7 +128,6 @@ class UserDetailFragment : Fragment(R.layout.fragment_user_detail) {
             viewLifecycleOwner,
             Lifecycle.State.RESUMED,
         )
-
     }
 
     private fun setUpViewWithUser(user: User) = binding.run {

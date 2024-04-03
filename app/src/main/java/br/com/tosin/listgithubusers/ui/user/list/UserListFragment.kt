@@ -1,11 +1,20 @@
 package br.com.tosin.listgithubusers.ui.user.list
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.SearchView
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,10 +25,11 @@ import androidx.recyclerview.widget.RecyclerView
 import br.com.tosin.listgithubusers.R
 import br.com.tosin.listgithubusers.api.GithubService
 import br.com.tosin.listgithubusers.databinding.FragmentUserListBinding
+import br.com.tosin.listgithubusers.ui.MainActivity
 import br.com.tosin.listgithubusers.ui.dialog.InformationAlertDialog
 import br.com.tosin.listgithubusers.ui.user.detail.UserDetailFragment
-import br.com.tosin.listgithubusers.ui.utils.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.user.list.adapter.UserAdapter
+import br.com.tosin.listgithubusers.ui.utils.loadstate.LoadStateFooterAdapter
 import br.com.tosin.listgithubusers.ui.utils.viewModelFactory
 import br.com.tosin.listgithubusers.utils.checkIsOnline
 import kotlinx.coroutines.flow.collectLatest
@@ -31,6 +41,8 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private val binding get() = _binding!!
     private lateinit var viewModel: UserListViewModel
     private lateinit var mAdapter: UserAdapter
+
+    private var isSearch = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +58,7 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
 
         setUpObservers()
         setUpView()
+        setUpMenu()
     }
 
     private fun setUpObservers() {
@@ -60,6 +73,13 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     }
 
     private fun setUpView() {
+        (requireActivity() as? MainActivity)?.let { mainActivity ->
+            mainActivity.setSupportActionBar(_binding?.toolbarUserList)
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            mainActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+            mainActivity.supportActionBar?.setDisplayShowTitleEnabled(false)
+        }
+
         mAdapter = UserAdapter { username ->
             openUserDetails(username)
         }
@@ -70,20 +90,21 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
             // Show loading spinner during initial load or refresh.
             val showLoading = loadState.source.refresh is LoadState.Loading
 
-            val hasError = loadState.source.refresh is LoadState.Error
-
-            if (hasError) {
-                showEmptyList(true)
-                showError(getString(R.string.no_network))
-            }
-
             // here only hide loading. The show is in launch search/load
             if (showLoading) {
-                showEmptyList(false)
+                showEmptyList(show = false)
+                showEmptySearch(show = false)
             } else if (showList && mAdapter.itemCount == 0) {
-                showEmptyList(true)
+                if (isSearch) {
+                    showEmptyList(show = false)
+                    showEmptySearch(show = true)
+                } else {
+                    showEmptyList(show = true)
+                    showEmptySearch(show = false)
+                }
             } else if (showList && mAdapter.itemCount > 0) {
-                showEmptyList(false)
+                showEmptyList(show = false)
+                showEmptySearch(show = false)
             }
         }
 
@@ -99,10 +120,87 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
         }
 
         lifecycleScope.launch {
-            viewModel.loadUsers(isOnline = checkIsOnline(requireContext())).collectLatest {
-                mAdapter.submitData(it)
+            if (checkIsOnline(requireContext())) {
+                viewModel.loadUsers().collectLatest {
+                    mAdapter.submitData(it)
+                }
+            } else {
+                showError(getString(R.string.no_network))
             }
         }
+    }
+
+    private fun setUpMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(
+            object : MenuProvider {
+                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                    menuInflater.inflate(R.menu.menu_user_list, menu)
+                    configTextSearch(menu.findItem(R.id.action_search))
+                }
+
+                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                    return when (menuItem.itemId) {
+                        R.menu.menu_user_list -> {
+                            true
+                        }
+
+                        else -> {
+                            false
+                        }
+                    }
+                }
+            },
+            viewLifecycleOwner,
+            Lifecycle.State.RESUMED,
+        )
+    }
+
+    private fun configTextSearch(searchItem: MenuItem?) {
+        val searchManager = requireActivity().getSystemService(
+            Context.SEARCH_SERVICE
+        ) as SearchManager
+        var searchView: SearchView? = null
+        if (searchItem != null) {
+            searchView = searchItem.actionView as SearchView
+        }
+        searchView?.setSearchableInfo(
+            searchManager.getSearchableInfo(requireActivity().componentName)
+        )
+        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(s: String): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(s: String): Boolean {
+                isSearch = true
+                lifecycleScope.launch {
+                    if (checkIsOnline(requireContext())) {
+                        viewModel.loadUsers(
+                            searchUser = s.trim()
+                        ).collectLatest {
+                            mAdapter.submitData(it)
+                        }
+                    } else {
+                        showError(getString(R.string.no_network))
+                    }
+                }
+                return false
+            }
+        })
+        searchView?.setOnCloseListener {
+            isSearch = false
+            if (checkIsOnline(requireContext())) {
+                lifecycleScope.launch {
+                    viewModel.loadUsers().collectLatest {
+                        mAdapter.submitData(it)
+                    }
+                }
+            } else {
+                showError(getString(R.string.no_network))
+            }
+            false
+        }
+
     }
 
     private fun showError(msg: String) {
@@ -115,6 +213,11 @@ class UserListFragment : Fragment(R.layout.fragment_user_list) {
     private fun showEmptyList(show: Boolean) {
         binding.placeholderEmptyList.root.isVisible = show
     }
+
+    private fun showEmptySearch(show: Boolean) {
+        binding.placeholderEmptySearch.root.isVisible = show
+    }
+
 
     private fun openUserDetails(username: String) {
         val args = Bundle().apply {

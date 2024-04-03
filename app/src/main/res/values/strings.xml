@@ -10,4 +10,6 @@
     <string name="gist">Gist</string>
     <string name="last_updated">Última atualização %s</string>
     <string name="empty_repository_list">Apesar da floresta estar cheia, não há projetos</string>
+    <string name="search">Buscar por nome de usuário</string>
+    <string name="empty_search">Nenhum usuário encontrado para a busca</string>
 </resources>
